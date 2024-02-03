@@ -42,15 +42,28 @@ INSTALLED_APPS = [
     'drf_yasg',
     'oauth2_provider',
     'debug_toolbar',
+    'djoser',
+    'rest_framework_simplejwt'
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': (
         'rest_framework.pagination.PageNumberPagination'),
-    'PAGE_SIZE': '2'
+    'PAGE_SIZE': '5'
+}
+
+AUTHENTICATION_CLASSES = [
+    'djoser.backends.jwt.JWTAuth',
+]
+
+DJOSER = {
+    'SERIALIZERS': {
+        'token_create': 'thesis.serializers.CustomTokenCreateSerializer',
+    },
 }
 
 cloudinary.config(

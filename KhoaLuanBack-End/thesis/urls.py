@@ -6,7 +6,7 @@ routers = routers.DefaultRouter()
 routers.register('user', views.CustomUserViewSet, basename='user')
 routers.register('thesis', views.ThesisViewSet, basename='thesis')
 routers.register('council', views.DefenseCouncilViewSet, basename='council')
-routers.register('grade', views.ThesisScoreViewSet, basename='grade')
+routers.register('score', views.ThesisScoreViewSet, basename='score')
 
 urlpatterns = [
     path('', include(routers.urls))

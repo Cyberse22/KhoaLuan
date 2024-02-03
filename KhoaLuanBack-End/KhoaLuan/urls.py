@@ -22,6 +22,14 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView
+)
+
+from djoser import views as djoser_views
+from rest_framework_simplejwt import views as jwt_views
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Thesis API",
@@ -33,7 +41,6 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
-
 
 urlpatterns = [
     path('', include('thesis.urls')),
@@ -48,5 +55,12 @@ urlpatterns = [
             name='schema-swagger-ui'),
     re_path(r'^redoc/$',
             schema_view.with_ui('redoc', cache_timeout=0),
-            name='schema-redoc')
+            name='schema-redoc'),
+    path('api/token/', TokenObtainPairView.as_view(),
+         name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(),
+         name='token_refresh'),
+    path('auth/', djoser_views.TokenCreateView.as_view(), name='token_create'),
+    path('auth/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/verify/', djoser_views.TokenDestroyView.as_view(), name='token_verify'),
 ]
