@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "KhoaLuanFrontEnd",
+    "slug": "KhoaLuanFrontEnd",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "KhoaLuanFrontEnd"
+}
