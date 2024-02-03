@@ -1,0 +1,10 @@
+{% extends 'admin/base_site.html' %}
+{% block content %}
+<h1>THỐNG KÊ KHÓA LUẬN THEO TỪNG NĂM</h1>
+<h2>Số lượng khoá học: {{ thesis_count }}</h2>
+<ul>
+    {% for t in thesis_stats %}
+<li><strong>{{ t.thesis }}</strong> có {{ c.thesis_count }} khóa luận </li>
+{% endfor %}
+</ul>
+{% endblock %}
