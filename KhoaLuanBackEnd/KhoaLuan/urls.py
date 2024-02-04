@@ -60,7 +60,4 @@ urlpatterns = [
          name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(),
          name='token_refresh'),
-    path('auth/', djoser_views.TokenCreateView.as_view(), name='token_create'),
-    path('auth/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('auth/verify/', djoser_views.TokenDestroyView.as_view(), name='token_verify'),
 ]

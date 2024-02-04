@@ -6,14 +6,6 @@ from djoser.serializers import TokenCreateSerializer
 from rest_framework import serializers
 
 
-class CustomTokenCreateSerializer(TokenCreateSerializer):
-    additional_info = serializers.SerializerMethodField()
-
-    def get_additional_info(self, obj):
-        # Customize additional information to include in the token, if needed
-        return "CustomUser Info"
-
-
 class CustomUserSerializer(ModelSerializer):
     class Meta:
         model = CustomUser

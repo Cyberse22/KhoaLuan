@@ -76,4 +76,3 @@ class ThesisScore(BaseModel):
     score = models.DecimalField(max_digits=5, decimal_places=2)
     criteria = models.JSONField()
 
-

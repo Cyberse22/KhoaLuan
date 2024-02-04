@@ -56,16 +56,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': '5'
 }
 
-AUTHENTICATION_CLASSES = [
-    'djoser.backends.jwt.JWTAuth',
-]
-
-DJOSER = {
-    'SERIALIZERS': {
-        'token_create': 'thesis.serializers.CustomTokenCreateSerializer',
-    },
-}
-
 cloudinary.config(
     cloud_name="dnjupjumj",
     api_key="962953924372766",

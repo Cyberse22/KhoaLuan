@@ -1,4 +1,5 @@
 from rest_framework.permissions import BasePermission, IsAuthenticated
+from .models import CustomUser
 
 
 class OwnerAuthenticated(IsAuthenticated):
@@ -14,6 +15,8 @@ class IsAdmin(BasePermission):
 
 
 class IsSinhVien(BasePermission):
+    user = CustomUser()
+
     def has_permission(self, request, view):
         return request.user and request.user.role == 'sinhvien'
 

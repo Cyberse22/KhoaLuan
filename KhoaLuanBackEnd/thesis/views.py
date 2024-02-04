@@ -42,11 +42,11 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 class DefenseCouncilViewSet(viewsets.ModelViewSet):
     queryset = DefenseCouncil.objects.filter(active=True)
     serializer_class = DefenseCouncilSerializer
-    permission_classes = [permissions.IsAuthenticated, IsGiangVien, IsGiangVien]
+    permission_classes = [permissions.IsAuthenticated, IsGiangVien, IsGiaoVuKhoa]
 
     def get_permissions(self):
         if self.action.__eq__('current_user'):
-            return [permissions.IsAuthenticated()]
+            return [permissions.IsAuthenticated(), IsGiaoVuKhoa(), IsGiangVien()]
 
         return [permissions.AllowAny()]
 
@@ -77,6 +77,10 @@ class ThesisViewSet(viewsets.ModelViewSet):
     @action(methods='post', url_path='post_info', url_name='post_info', detail=True)
     def post_info(self, request, pk=None):
         thesis = self.get_object()
+
+        if not IsGiaoVuKhoa().has_permission(request, self):
+            return Response({'error': 'Không có quyền truy cập'}, status=status.HTTP_403_FORBIDDEN)
+
         info = ['id', 'name', 'students', 'advisors', 'date_defend', 'is_defend']
         for field in info:
             setattr(thesis, field, request.data.get(field))
@@ -102,7 +106,33 @@ class ThesisScoreViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action.__eq__('current_user'):
-            return [permissions.IsAuthenticated()]
+            return [permissions.IsAuthenticated(), IsSinhVien(), IsGiangVien(), IsGiaoVuKhoa]
 
         return [permissions.AllowAny()]
 
+    @action(methods=['post'], detail=True)
+    def score_thesis(self, request, pk=None):
+        thesis_score = self.get_object()
+
+        if IsGiangVien().has_permission():
+            score = request.data.get('score')
+            criteria = request.data.get('criteria')
+
+            thesis_score.score = score
+            thesis_score.criteria = criteria
+            thesis_score.save()
+
+            return Response({'message': 'Điểm đã được cập nhật thành công.'}, status=status.HTTP_200_OK)
+
+        elif IsSinhVien().has_permission(request, self):
+            score = thesis_score.score
+            criteria = thesis_score.criteria
+            return Response({'message': f'Điểm của bạn là {score}', 'criteria': criteria}, status=status.HTTP_200_OK)
+
+        elif IsGiaoVuKhoa().has_permission(request, self):
+            score = thesis_score.score
+            criteria = thesis_score.criteria
+            return Response({'message': f'Điểm là {score}', 'criteria': criteria}, status=status.HTTP_200_OK)
+
+        else:
+            return Response({'error': 'Người dùng không có quyền thực hiện hành động này'}, status=status.HTTP_403_FORBIDDEN)
