@@ -42,14 +42,12 @@ INSTALLED_APPS = [
     'drf_yasg',
     'oauth2_provider',
     'debug_toolbar',
-    'djoser',
-    'rest_framework_simplejwt'
+    'cloudinary',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': (
         'rest_framework.pagination.PageNumberPagination'),
@@ -152,10 +150,9 @@ AUTH_USER_MODEL = 'thesis.CustomUser'
 pymysql.install_as_MySQLdb()
 
 # Django OAuth2
-CLIENT_ID = 'J84QTBlGltZ36lx6UYcalbRQzgRBhQfQSDSzN6qx'
-CLIENT_SECRET = 'RXzfKTtmf9hXlrlRlDt5R6CJjYAjLEYuserNoOwFDnSJnybX5yxizeUxdXbVNu28nDgaAjSCVBPmv6GAU9KutTmYa4JvNclDnLrdRaJVZx541AWNf92ISkjDbnRNM6LH'
+CLIENT_ID = '7c0M1SsXHAU0qnCGwNamxBmEkfUiXdyBtwFNvNfg'
+CLIENT_SECRET = 'pjl7L3PtEFYT2IqURRmlXjTJwZVcDclP53SDrgDFzQBrtc8QcCKFy5BOdm7y7KZZsInVKhEVNUekR20USsDsudbWh3DXHjzN1n8KEKLkpuzrTDVWHvJsPgEBGz6hH5LE'
 
 # OAUTH2_PROVIDER = {
-#     # other OAUTH2 settings
 #     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
 # }

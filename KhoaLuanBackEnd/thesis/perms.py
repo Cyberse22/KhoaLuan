@@ -15,17 +15,21 @@ class IsAdmin(BasePermission):
 
 
 class IsSinhVien(BasePermission):
-    user = CustomUser()
-
     def has_permission(self, request, view):
-        return request.user and request.user.role == 'sinhvien'
+        if request.method in ['GET', 'HEAD', 'OPTIONS', 'PUT']:
+            return True
+        return request.user.is_authenticated and request.user.role == 'sinhvien'
 
 
 class IsGiangVien(BasePermission):
     def has_permission(self, request, view):
-        return request.user and request.user.role == 'giangvien'
+        if request.method in ['GET', 'HEAD', 'OPTIONS', 'PUT']:
+            return True
+        return request.user.is_authenticated and request.user.role == 'giangvien'
 
 
 class IsGiaoVuKhoa(BasePermission):
     def has_permission(self, request, view):
-        return request.user and request.user.role == 'giaovukhoa'
+        if request.method in ['GET', 'HEAD', 'OPTIONS', 'PUT']:
+            return True
+        return request.user.is_authenticated and request.user.role == 'giaovukhoa'

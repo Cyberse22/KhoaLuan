@@ -1,19 +1,17 @@
-from django.http import JsonResponse
-from django.shortcuts import render
-from djoser.serializers import TokenCreateSerializer
-from rest_framework import viewsets, permissions, generics, parsers, status, serializers
+from django.contrib.auth import authenticate
+from rest_framework import viewsets, permissions, parsers, status, request
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import CustomUser, Thesis, DefenseCouncil, ThesisScore
 from .serializers import CustomUserSerializer, DefenseCouncilSerializer, ThesisScoreSerializer, ThesisSerializer, UserChangePasswordSerializer
-from .perms import IsSinhVien, IsGiaoVuKhoa, IsGiangVien, IsAdmin
+from .perms import IsSinhVien, IsGiaoVuKhoa, IsGiangVien
+from thesis import serializers
 
 
 class CustomUserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.filter(is_active=True)
-    serializer_class = CustomUserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    queryset = CustomUser.objects.filter(is_active=True).all()
+    serializer_class = serializers.CustomUserSerializer
     parser_classes = [parsers.MultiPartParser]
 
     def get_permissions(self):
@@ -21,6 +19,10 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             return [permissions.IsAuthenticated()]
 
         return [permissions.AllowAny()]
+
+    @action(methods=['get'], url_path='current-user', url_name='current-user', detail=False)
+    def current_user(self, request):
+        return Response(serializers.CustomUserSerializer(request.user).data)
 
     @action(methods=['put'], detail=True)
     def chang_password(self, request):
