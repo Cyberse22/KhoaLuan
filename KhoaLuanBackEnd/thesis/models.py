@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from cloudinary.models import CloudinaryField
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 # reviewer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='reviewer_thesis')
@@ -44,6 +46,13 @@ class CustomUser(AbstractUser):
         ordering = ['id']
 
 
+@receiver(post_save, sender=CustomUser)
+def assign_default_avatar(sender, instance, created, **kwargs):
+    if created and not instance.avatar:
+        instance.avatar = 'https://res.cloudinary.com/dnjupjumj/image/upload/v1707143617/fbcenucmko5hqwerew9w.jpg'
+        instance.save()
+
+
 # Models DefenseCouncil
 class DefenseCouncil(BaseModel):
     id = models.CharField(null=False, primary_key=True, unique=True, max_length=10)
@@ -75,4 +84,3 @@ class ThesisScore(BaseModel):
     council = models.ForeignKey(DefenseCouncil, on_delete=models.CASCADE, related_name='council_score')
     score = models.DecimalField(max_digits=5, decimal_places=2)
     criteria = models.JSONField()
-
