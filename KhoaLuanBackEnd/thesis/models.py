@@ -49,7 +49,7 @@ class CustomUser(AbstractUser):
 @receiver(post_save, sender=CustomUser)
 def assign_default_avatar(sender, instance, created, **kwargs):
     if created and not instance.avatar:
-        instance.avatar = 'https://res.cloudinary.com/dnjupjumj/image/upload/v1707143617/fbcenucmko5hqwerew9w.jpg'
+        instance.avatar = 'upload/v1707143617/fbcenucmko5hqwerew9w.jpg'
         instance.save()
 
 
