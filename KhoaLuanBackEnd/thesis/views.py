@@ -4,7 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import CustomUser, Thesis, DefenseCouncil, ThesisScore
-from .serializers import CustomUserSerializer, DefenseCouncilSerializer, ThesisScoreSerializer, ThesisSerializer, UserChangePasswordSerializer
+from .serializers import CustomUserSerializer, DefenseCouncilSerializer, ThesisScoreSerializer, ThesisSerializer, \
+    UserChangePasswordSerializer, SinhVienSerializer, GiangVienSerializer, GiaoVuKhoaSerializer
 from .perms import IsSinhVien, IsGiaoVuKhoa, IsGiangVien
 from thesis import serializers
 
@@ -20,9 +21,19 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 
         return [permissions.AllowAny()]
 
-    @action(methods=['get'], url_path='current-user', url_name='current-user', detail=False)
+    @action(methods=['get'], url_path='current-user', detail=False)
     def current_user(self, request):
-        return Response(serializers.CustomUserSerializer(request.user).data)
+        user = request.user
+        if user.role == 'sinhvien':
+            serializer = SinhVienSerializer(user.sinhvien)
+        elif user.role == 'giangvien':
+            serializer = GiangVienSerializer(user.giangvien)
+        elif user.role == 'giaovukhoa':
+            serializer = GiaoVuKhoaSerializer(user.giaovukhoa)
+        else:
+            return Response({'error': 'Vai trò không hợp lệ'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data)
 
     @action(methods=['put'], detail=True)
     def chang_password(self, request):

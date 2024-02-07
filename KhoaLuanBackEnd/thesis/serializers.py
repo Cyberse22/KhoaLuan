@@ -9,7 +9,7 @@ from rest_framework import serializers
 class CustomUserSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password', 'avatar', 'role', 'major', 'is_active']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password', 'avatar', 'is_active']
         extra_kwargs = {
             'password': {
                 'write_only': True
@@ -38,6 +38,42 @@ class UserChangePasswordSerializer(serializers.Serializer):
         if new_password != confirm_new_password:
             raise serializers.ValidationError("Mật khẩu mới và xác nhận mật khẩu không khớp")
 
+        return data
+
+
+class SinhVienSerializer(CustomUserSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['role', 'major']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if data['role'] == 'sinhvien':
+            data['additional_field'] = instance.additional_field
+        return data
+
+
+class GiangVienSerializer(CustomUserSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['role', 'major']
+
+        def to_representation(self, instance):
+            data = super().to_representation(instance)
+            if data['role'] == 'giangvien':
+                data['additional_field'] = instance.additional_field
+            return data
+
+
+class GiaoVuKhoaSerializer(CustomUserSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['role', 'major']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if data['role'] == 'giaovukhoa':
+            data['additional_field'] = instance.additional_field
         return data
 
 

@@ -16,8 +16,8 @@ admin_site = ThesisAppAdminSite(name='myadmin')
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['id', 'username', 'first_name', 'last_name', 'date_joined', 'is_active']
-    list_filter = ['id', 'username']
+    list_display = ['id', 'username', 'first_name', 'last_name', 'date_joined', 'role', 'major', 'is_active']
+    list_filter = ['id', 'username', 'role', 'major',]
     search_fields = ['id', 'first_name', 'last_name']
     readonly_fields = ['avatar']
 
@@ -27,9 +27,14 @@ class UserAdmin(admin.ModelAdmin):
         )
 
 
+class ThesisAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'active']
+    list_filter = ['id', 'students']
+
+
 admin_site.register(CustomUser, UserAdmin)
 admin_site.register(DefenseCouncil)
-admin_site.register(Thesis)
+admin_site.register(Thesis, ThesisAdmin)
 admin_site.register(ThesisScore)
 admin_site.register(Permission)
 admin_site.register(Group)
